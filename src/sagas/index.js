@@ -1,4 +1,7 @@
 import {put, takeLatest, all} from 'redux-saga/effects';
+import axios from "axios";
+
+const apiUrl = 'http://127.0.0.1:5000/';
 
 function* fetchNews() {
 
@@ -10,26 +13,47 @@ function* fetchNews() {
 
 function* fetchDoctors() {
 
-    const json = yield fetch('http://127.0.0.1:5000/doctors')
+    const json = yield fetch(apiUrl + 'doctors')
         .then(response => response.json());
 
     yield put({type: "DOCTORS_RECEIVED", json: json.doctors || [{error: json.message}]});
 }
 
 
-function* submitAppointment() {
+const submitAppointment = (input) => {
+    console.log('submitAppointment saga: ', input);
+    let url = apiUrl + "/appointment";
+    return axios
+        .post(url, input)
+        .then(result => {
+            return result;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
 
-    const json = yield fetch('http://127.0.0.1:5000/doctors')
-        .then(response => response.json());
+const appointment = function* ({input}) {
+    try {
+        console.log('appointment saga: ', input);
+        const response = yield call(submitAppointment, input);
+        console.log("RESPONSE", response);
 
-    console.log(json.doctors);
+        yield put({type: "SUBMIT_APPOINTMENT_RESULT", appointment: response.data});
 
-    yield put({type: "DOCTORS_RECEIVED", json: json.doctors || [{error: json.message}]});
-}
+    }
+    catch (err) {
+        console.log("ERROR");
+        console.log(err);
+        yield put({type: "SUBMIT_APPOINTMENT_RESULT", appointment: false});
+    }
+};
+
 
 function* actionWatcher() {
     yield takeLatest('GET_NEWS', fetchNews);
     yield takeLatest('GET_DOCTORS', fetchDoctors);
+    yield takeLatest('SUBMIT_APPOINTMENT', appointment);
 }
 
 
