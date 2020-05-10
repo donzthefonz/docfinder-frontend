@@ -1,5 +1,6 @@
 import {put, takeLatest, call, all} from 'redux-saga/effects';
 import axios from "axios";
+import querystring from 'querystring';
 
 const apiUrl = 'http://localhost:5000/';
 
@@ -23,8 +24,14 @@ function* fetchDoctors() {
 const submitAppointment = (input) => {
     console.log('submitAppointment saga: ', input);
     let url = apiUrl + "appointment";
+    let form = {
+        'email' : input.email,
+        'name'  : input['name'],
+        'doctor': input.doctor.name,
+        'time'  : input.time,
+    };
     return axios
-        .post(url, input)
+        .post(url, querystring.stringify(form))
         .then(result => {
             return result;
         })

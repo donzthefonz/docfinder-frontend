@@ -39,6 +39,7 @@
     "axios": "^0.19.2",
     "keymirror": "^0.1.1",
     "modal-popup": "^1.0.0",
+    "querystring": "^0.2.0",
     "react": "16.13.1",
     "react-google-maps": "^9.4.5",
     "react-modal": "^3.11.2",

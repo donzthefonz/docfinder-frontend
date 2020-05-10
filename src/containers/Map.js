@@ -33,9 +33,6 @@ const useAppointmentForm = (callback) => {
 
 function MapComponent(props) {
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState(null);
-    const [time, setTime] = useState(null);
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [modal, setModal] = useState(false);
     const [mapCenter, setMapCenter] = useState({lat: 55.865573, lng: -4.250728});
@@ -46,19 +43,16 @@ function MapComponent(props) {
     function submitAppointmentForm() {
         console.log('submit...');
         console.log('inputs: ', inputs);
-        console.log('name: ', inputs.Name);
-        // let formObj = {
-        //     name  : name,
-        //     email : email,
-        //     doctor: selectedDoctor,
-        //     time  : time
-        // };
         let formObj = {
-            name: inputs.Name
+            name  : inputs.Name,
+            email : inputs.Email,
+            doctor: selectedDoctor,
+            time  : inputs.Time
         };
         console.log('formObj: ', formObj);
         console.log('props: ', props);
         props.submitAppointment(formObj);
+        alert('success!');
     }
 
     function renderModal() {
@@ -76,6 +70,16 @@ function MapComponent(props) {
                                 <input type="text" name="Name" onChange={handleInputChange} value={inputs.name}
                                        required/>
                             </label>
+                            <label>
+                                Email:
+                                <input type="text" name="Email" onChange={handleInputChange} value={inputs.email}
+                                       required/>
+                            </label>
+                            <label>
+                                Time:
+                                <input type="text" name="Time" onChange={handleInputChange} value={inputs.time}
+                                       required/>
+                            </label>
                         </form>
                     </ModalBody>
                     <ModalFooter>
@@ -91,18 +95,6 @@ function MapComponent(props) {
         setSelectedDoctor(doctor);
         setModal(true);
     }
-
-    // function handleSubmit() {
-    //     return (
-    //         <form onSubmit={this.handleSubmit}>
-    //             <label>
-    //                 Name:
-    //                 <input type="text" value={this.state.value} onChange={this.handleChange}/>
-    //             </label>
-    //             <input type="submit" value="Submit"/>
-    //         </form>
-    //     );
-    // }
 
     console.log('props', props);
     return (
@@ -151,20 +143,12 @@ let Map = (state) => (
     />
 );
 
-// let Map = ({doctors}) => (
-//     <MapWrapper
-//         isMarkerShown
-//         googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBl7lv6GpS081wLJXa3zIxNJlJyG3WsUrI"
-// loadingElement={<div style={{height: `100%`}}/>} containerElement={<div style={{height: `400px`}}/>}
-// mapElement={<div style={{height: `100%`}}/>} doctors={doctors} /> );
-
 const mapStateToProps = (state) => ({
     doctors          : state.doctors,
     submitAppointment: state.submitAppointment
 });
 
 const mapDispatchToProps = {
-
     submitAppointment: submitAppointment,
 };
 
