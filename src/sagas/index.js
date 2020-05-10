@@ -1,7 +1,7 @@
-import {put, takeLatest, all} from 'redux-saga/effects';
+import {put, takeLatest, call, all} from 'redux-saga/effects';
 import axios from "axios";
 
-const apiUrl = 'http://127.0.0.1:5000/';
+const apiUrl = 'http://localhost:5000/';
 
 function* fetchNews() {
 
@@ -22,7 +22,7 @@ function* fetchDoctors() {
 
 const submitAppointment = (input) => {
     console.log('submitAppointment saga: ', input);
-    let url = apiUrl + "/appointment";
+    let url = apiUrl + "appointment";
     return axios
         .post(url, input)
         .then(result => {

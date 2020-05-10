@@ -5,6 +5,7 @@ import {Button, Card, CardBody, Col, Modal, ModalBody, ModalHeader, ModalFooter}
 import Row from "reactstrap/es/Row";
 import {getDoctors, submitAppointment} from '../actions';
 
+
 const useAppointmentForm = (callback) => {
     const [inputs, setInputs] = useState({});
     // const handleSubmit = (event) => {
@@ -40,10 +41,6 @@ function MapComponent(props) {
     const [mapCenter, setMapCenter] = useState({lat: 55.865573, lng: -4.250728});
     const toggle = () => setModal(!modal);
 
-    // const appt = () => {
-    //     console.log(`Appointment Created!
-    //      Name: ${inputs.name}`);
-    // };
     const {inputs, handleInputChange} = useAppointmentForm();
 
     function submitAppointmentForm() {
@@ -61,8 +58,7 @@ function MapComponent(props) {
         };
         console.log('formObj: ', formObj);
         console.log('props: ', props);
-        getDoctors();
-        submitAppointment(formObj);
+        props.submitAppointment(formObj);
     }
 
     function renderModal() {
@@ -108,9 +104,10 @@ function MapComponent(props) {
     //     );
     // }
 
-
+    console.log('props', props);
     return (
         <div>
+
             {renderModal()}
             <GoogleMap
                 defaultZoom={8}
@@ -142,26 +139,38 @@ const errorMessage = {
     color: 'red'
 };
 
-let Map = ({doctors}) => (
+let Map = (state) => (
     <MapWrapper
         isMarkerShown
         googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBl7lv6GpS081wLJXa3zIxNJlJyG3WsUrI"
         loadingElement={<div style={{height: `100%`}}/>}
         containerElement={<div style={{height: `400px`}}/>}
         mapElement={<div style={{height: `100%`}}/>}
-        doctors={doctors}
-        submitAppointment={submitAppointment}
+        doctors={state.doctors}
+        submitAppointment={state.submitAppointment}
     />
 );
 
+// let Map = ({doctors}) => (
+//     <MapWrapper
+//         isMarkerShown
+//         googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBl7lv6GpS081wLJXa3zIxNJlJyG3WsUrI"
+// loadingElement={<div style={{height: `100%`}}/>} containerElement={<div style={{height: `400px`}}/>}
+// mapElement={<div style={{height: `100%`}}/>} doctors={doctors} /> );
+
 const mapStateToProps = (state) => ({
     doctors          : state.doctors,
-    submitAppointment: state.submitAppointment,
+    submitAppointment: state.submitAppointment
 });
+
+const mapDispatchToProps = {
+
+    submitAppointment: submitAppointment,
+};
 
 Map = connect(
     mapStateToProps,
-    null
+    mapDispatchToProps,
 )(Map);
 
 

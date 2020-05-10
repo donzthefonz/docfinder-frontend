@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {getDoctors} from '../actions';
+import {getDoctors, submitAppointment} from '../actions';
+import Map from "./Map";
 
 let styles = {
     backgroundColor: 'HotPink',
@@ -21,16 +22,20 @@ class Button extends React.Component {
 
     render() {
         return (
-            <button style={!this.state.hover ? styles : {...styles, backgroundColor: 'DarkTurquoise '}}
-                    onMouseOut={() => {
-                        this.setState({hover: false});
-                    }}
-                    onMouseOver={() => {
-                        this.setState({hover: true});
-                    }}
-                    onClick={this.props.getDoctors}
-            >Press to find a doctor.</button>
-
+            <div>
+                <button style={!this.state.hover ? styles : {...styles, backgroundColor: 'DarkTurquoise '}}
+                        onMouseOut={() => {
+                            this.setState({hover: false});
+                        }}
+                        onMouseOver={() => {
+                            this.setState({hover: true});
+                        }}
+                        onClick={this.props.getDoctors}
+                >Press to find a doctor.
+                </button>
+                <Map
+                test={true}/>
+            </div>
 
         );
     }
