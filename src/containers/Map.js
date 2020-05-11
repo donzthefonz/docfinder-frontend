@@ -49,7 +49,14 @@ function MapComponent(props) {
         // console.log('props: ', props);
         props.submitAppointment(formObj);
         setModal(false);
-        alert.show('Success!');
+
+        // TODO: Proper error handling. Error is never true here
+        if (!props.error) {
+            alert.show('Sending appointment request. You should receive an email if this was successful.');
+        } else {
+            alert.show('Error!');
+        }
+
     }
 
     function renderModal() {
@@ -74,7 +81,7 @@ function MapComponent(props) {
                             </label>
                             <label>
                                 Time:
-                                <input type="text" name="Time" onChange={handleInputChange} value={inputs.time}
+                                <input type="datetime-local" name="Time" onChange={handleInputChange} value={inputs.time}
                                        required/>
                             </label>
                         </form>
@@ -118,6 +125,7 @@ function MapComponent(props) {
         <div>
             {renderNotification()}
             {renderModal()}
+            {!props.error &&
             <GoogleMap
                 defaultZoom={8}
                 center={{lat: mapCenter.lat, lng: mapCenter.lng}}
@@ -137,7 +145,8 @@ function MapComponent(props) {
 
 
                 ))}
-            </GoogleMap></div>);
+            </GoogleMap>}
+            {props.error && <div>Error communicating with API</div>}</div>);
 }
 
 // Needed to display the map properly
@@ -159,13 +168,15 @@ let Map = (state) => (
         doctors={state.doctors}
         submitAppointment={state.submitAppointment}
         appointment={state.appointment}
+        error={state.error}
     />
 );
 
 
 const mapStateToProps = (state) => ({
     doctors    : state.doctors,
-    appointment: state.appointment
+    appointment: state.appointment,
+    error      : state.error
 });
 
 const mapDispatchToProps = {

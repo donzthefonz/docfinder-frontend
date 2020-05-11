@@ -14,10 +14,19 @@ function* fetchNews() {
 
 function* fetchDoctors() {
 
-    const json = yield fetch(apiUrl + 'doctors')
-        .then(response => response.json());
+    try {
+        const json = yield fetch(apiUrl + 'doctors')
+            .then(response => response.json());
 
-    yield put({type: "DOCTORS_RECEIVED", json: json.doctors || [{error: json.message}]});
+        yield put({type: "DOCTORS_RECEIVED", json: json.doctors || [{error: json.message}]});
+    }
+    catch (err) {
+        console.log("ERROR");
+        console.log(err);
+        yield put({type: "DOCTORS_RECEIVED_ERROR", error: err});
+    }
+
+
 }
 
 
@@ -52,7 +61,7 @@ const appointment = function* ({input}) {
     catch (err) {
         console.log("ERROR");
         console.log(err);
-        yield put({type: "SUBMIT_APPOINTMENT_RESULT", appointment: false});
+        yield put({type: "SUBMIT_APPOINTMENT_ERROR", error: err});
     }
 };
 
