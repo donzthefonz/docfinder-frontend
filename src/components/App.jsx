@@ -1,17 +1,13 @@
 import React from 'react';
-import Button from '../containers/Button';
-import ButtonNews from '../containers/ButtonNews';
-import NewsItem from '../containers/NewsItem';
+import Doctor from '../containers/Doctor';
 import Loading from '../containers/Loading';
 
 
 
 let App = () => (
     <div>
-        <Button/>
-        {/*<ButtonNews/>*/}
+        <Doctor/>
         <Loading/>
-        {/*<NewsItem/>*/}
     </div>
 );
 

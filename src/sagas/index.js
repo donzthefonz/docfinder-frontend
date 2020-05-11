@@ -26,7 +26,7 @@ const submitAppointment = (input) => {
     let url = apiUrl + "appointment";
     let form = {
         'email' : input.email,
-        'name'  : input['name'],
+        'name'  : input.name,
         'doctor': input.doctor.name,
         'time'  : input.time,
     };
@@ -46,7 +46,7 @@ const appointment = function* ({input}) {
         const response = yield call(submitAppointment, input);
         console.log("RESPONSE", response);
 
-        yield put({type: "SUBMIT_APPOINTMENT_RESULT", appointment: response.data});
+        yield put({type: "SUBMIT_APPOINTMENT_RESULT", appointment: true});
 
     }
     catch (err) {

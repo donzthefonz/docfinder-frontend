@@ -3,19 +3,14 @@ import {connect} from 'react-redux';
 import {withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps";
 import {Button, Card, CardBody, Col, Modal, ModalBody, ModalHeader, ModalFooter} from "reactstrap";
 import Row from "reactstrap/es/Row";
-import {getDoctors, submitAppointment} from '../actions';
+import {submitAppointment} from '../actions';
+
+import {useAlert} from 'react-alert';
 
 
+// Functional component in order to wrap it and also pass params.
 const useAppointmentForm = (callback) => {
     const [inputs, setInputs] = useState({});
-    // const handleSubmit = (event) => {
-    //     if (event) {
-    //         event.preventDefault();
-    //         console.log('submit2...');
-    //     }
-    //     console.log('submit3...');
-    //     callback();
-    // };
     const handleInputChange = (event) => {
         event.persist();
         // console.log('INPUTS: ', inputs);
@@ -24,7 +19,6 @@ const useAppointmentForm = (callback) => {
 
 
     return {
-        // handleSubmit,
         handleInputChange,
         inputs
     };
@@ -40,6 +34,8 @@ function MapComponent(props) {
 
     const {inputs, handleInputChange} = useAppointmentForm();
 
+    const alert = useAlert();
+
     function submitAppointmentForm() {
         console.log('submit...');
         console.log('inputs: ', inputs);
@@ -49,10 +45,11 @@ function MapComponent(props) {
             doctor: selectedDoctor,
             time  : inputs.Time
         };
-        console.log('formObj: ', formObj);
-        console.log('props: ', props);
+        // console.log('formObj: ', formObj);
+        // console.log('props: ', props);
         props.submitAppointment(formObj);
-        alert('success!');
+        setModal(false);
+        alert.show('Success!');
     }
 
     function renderModal() {
@@ -96,10 +93,30 @@ function MapComponent(props) {
         setModal(true);
     }
 
-    console.log('props', props);
-    return (
-        <div>
+    // Not functional
+    function renderNotification() {
+        if (props.appointment === null || props.appointment === undefined) {
+            return (
+                ''
+            );
+        }
+        if (props.appointment) {
+            return (
+                alert.show('Success!')
+            );
+        }
+        if (props.appointment === false) {
+            return (
+                alert.show('Error sending appointment!')
+            );
+        }
+    }
 
+    console.log('PROPS: ', props);
+    return (
+
+        <div>
+            {renderNotification()}
             {renderModal()}
             <GoogleMap
                 defaultZoom={8}
@@ -123,6 +140,7 @@ function MapComponent(props) {
             </GoogleMap></div>);
 }
 
+// Needed to display the map properly
 const MapWrapper = withScriptjs(withGoogleMap((props) => {
     return MapComponent(props);
 }));
@@ -140,16 +158,18 @@ let Map = (state) => (
         mapElement={<div style={{height: `100%`}}/>}
         doctors={state.doctors}
         submitAppointment={state.submitAppointment}
+        appointment={state.appointment}
     />
 );
 
+
 const mapStateToProps = (state) => ({
-    doctors          : state.doctors,
-    submitAppointment: state.submitAppointment
+    doctors    : state.doctors,
+    appointment: state.appointment
 });
 
 const mapDispatchToProps = {
-    submitAppointment: submitAppointment,
+    submitAppointment: submitAppointment
 };
 
 Map = connect(

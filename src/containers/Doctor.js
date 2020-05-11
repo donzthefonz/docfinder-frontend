@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {getDoctors, submitAppointment} from '../actions';
+import {getDoctors} from '../actions';
 import Map from "./Map";
 
 let styles = {
@@ -14,7 +14,7 @@ let styles = {
     border         : '3px solid '
 };
 
-class Button extends React.Component {
+class DoctorButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {hover: false};
@@ -33,8 +33,7 @@ class Button extends React.Component {
                         onClick={this.props.getDoctors}
                 >Press to find a doctor.
                 </button>
-                <Map
-                test={true}/>
+                <Map/>
             </div>
 
         );
@@ -42,13 +41,17 @@ class Button extends React.Component {
 
 };
 
+const mapStateToProps = (state) => ({
+    appointment: state.appointment
+});
+
 const mapDispatchToProps = {
     getDoctors: getDoctors,
 };
 
-Button = connect(
-    null,
+DoctorButton = connect(
+    mapStateToProps,
     mapDispatchToProps,
-)(Button);
+)(DoctorButton);
 
-export default Button;
+export default DoctorButton;
