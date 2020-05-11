@@ -8,6 +8,7 @@ Simple React-Redux-Saga App  [tutorial article](https://medium.com/@lavitr010519
 
 ```
 git clone https://github.com/donzthefonz/docfinder-frontend.git
+cd docfinder-frontend
 npm install
 npm start
 open http://localhost:8080  (should start automatically )
